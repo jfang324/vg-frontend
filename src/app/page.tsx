@@ -1,26 +1,9 @@
 'use client'
-import { Sidebar, useSidebar } from '@components/ui/sidebar'
-import { useDrag } from '@use-gesture/react'
+import { useGestures } from '@components/sidebar'
 import Image from 'next/image'
-import { useState } from 'react'
 
 export default function Home() {
-	const { isMobile, setOpenMobile } = useSidebar()
-
-	const bind = useDrag(({ last, velocity, direction }) => {
-		if (!last || !isMobile) return
-
-		const [horizontalDirection] = direction
-		const [horizontalVelocity] = velocity
-
-		if (horizontalDirection === -1 && horizontalVelocity > 0.25) {
-			setOpenMobile(false)
-		}
-
-		if (horizontalDirection === 1 && horizontalVelocity > 0.25) {
-			setOpenMobile(true)
-		}
-	})
+	const bind = useGestures()
 
 	return (
 		<div
