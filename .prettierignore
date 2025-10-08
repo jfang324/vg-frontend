@@ -1,0 +1,7 @@
+# Ignore everything except src directory
+*
+!src/
+!src/**
+
+# Ignore shadcn/ui files inside src/components/ui
+src/components/ui/*

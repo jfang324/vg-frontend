@@ -1,0 +1,12 @@
+{
+    "editor.fontLigatures": true,
+    "editor.cursorStyle": "block",
+    "editor.fontFamily": "JetBrains Mono",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "prettier.singleQuote": true,
+    "editor.formatOnSave": true,
+    "prettier.semi": false,
+    "prettier.printWidth": 120,
+    "editor.formatOnPaste": true,
+    "prettier.tabWidth": 4,
+}
