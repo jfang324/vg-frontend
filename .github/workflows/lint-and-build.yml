@@ -4,6 +4,10 @@ on:
     pull_request:
         branches: ['**']
 
+env:
+    NEXT_PUBLIC_REPO_URL: 'https://github.com/jfang324/vg-frontend'
+    NEXT_PUBLIC_SUPPORT_URL: 'https://github.com/jfang324/vg-backend'
+
 jobs:
     lint:
         runs-on: ubuntu-latest
