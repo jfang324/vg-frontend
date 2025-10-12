@@ -1,14 +1,10 @@
 'use client'
 import { Button } from '@components/ui/button'
-import {
-	Sidebar,
-	SidebarContent,
-	SidebarGroup,
-	SidebarHeader,
-	SidebarMenuItem,
-	useSidebar
-} from '@components/ui/sidebar'
-import { ChevronLeft } from 'lucide-react'
+import { Separator } from '@components/ui/separator'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, useSidebar } from '@components/ui/sidebar'
+import { ChevronLeft, CreditCard, Github, Heart, Home, LogIn, Search, UserPlus } from 'lucide-react'
+import { useRef } from 'react'
+import { SearchInput } from './SearchInput'
 import { SidebarHint } from './SidebarHint'
 
 export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
@@ -20,6 +16,8 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 		setOpen(false)
 		setOpenMobile(false)
 	}
+
+	const searchRef = useRef<HTMLInputElement>(null)
 
 	return (
 		<>
@@ -43,10 +41,104 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 						</div>
 					) : (
 						<div className={'flex mx-auto hover:cursor-pointer'} onClick={() => setOpen(true)}>
-							<h2 className={'font-mono text-lg font-bold text-primary'}>VG</h2>
+							<h2 className={'font-mono text-2xl font-bold text-primary'}>VG</h2>
 						</div>
 					)}
+					<Separator className={'mt-2'} />
 				</SidebarHeader>
+
+				<SidebarContent>
+					<SidebarGroup>
+						<div className={'flex flex-col items-center gap-3'}>
+							<SearchInput
+								label={'Profile Search'}
+								placeholder={'Player name#tag'}
+								search={() => true}
+								validation={() => true}
+								searchRef={searchRef}
+								visible={open}
+							/>
+
+							{!isOpen && (
+								<Button
+									size={'icon-sm'}
+									variant={'ghost'}
+									className={'hover:cursor-pointer w-full justify-start px-2'}
+									onClick={() => {
+										setOpen(true)
+										setTimeout(() => searchRef.current?.focus(), 0)
+									}}
+								>
+									<Search className={'h-5 w-5'} />
+								</Button>
+							)}
+							<Button
+								size={'icon-sm'}
+								variant={'ghost'}
+								className={'hover:cursor-pointer w-full justify-start px-2'}
+							>
+								<Home className={'h-5 w-5'} /> {isOpen ? 'Home' : null}
+							</Button>
+							<Button
+								size={'icon-sm'}
+								variant={'ghost'}
+								className={'hover:cursor-pointer w-full justify-start px-2'}
+							>
+								<Github className={'h-5 w-5'} /> {isOpen ? 'GitHub Repository' : null}
+							</Button>
+							<Button
+								size={'icon-sm'}
+								variant={'ghost'}
+								className={'hover:cursor-pointer w-full justify-start px-2'}
+							>
+								<Heart className={'h-5 w-5'} /> {isOpen ? 'Support Me' : null}
+							</Button>
+							<Button
+								size={'icon-sm'}
+								variant={'ghost'}
+								className={'hover:cursor-pointer w-full justify-start px-2'}
+							>
+								<CreditCard className={'h-5 w-5'} /> {isOpen ? 'Premium Plans' : null}
+							</Button>
+						</div>
+					</SidebarGroup>
+
+					{!isOpen && (
+						<SidebarGroup>
+							<div className={'flex flex-col items-center gap-3'}>
+								<Separator className={'my-1'} />
+								<Button size={'icon-sm'} variant={'ghost'} className={'hover:cursor-pointer'}>
+									<LogIn className={'h-5 w-5'} />
+								</Button>
+								<Button size={'icon-sm'} variant={'ghost'} className={'hover:cursor-pointer'}>
+									<UserPlus className={'h-5 w-5'} />
+								</Button>
+							</div>
+						</SidebarGroup>
+					)}
+				</SidebarContent>
+
+				{isOpen && (
+					<SidebarFooter>
+						<Separator className={'mb-2'} />
+						<div className={'flex flex-col items-center gap-3'}>
+							<Button
+								size={'icon-sm'}
+								variant={'outline'}
+								className={'hover:cursor-pointer w-full justify-start px-2 rounded'}
+							>
+								<LogIn className={'h-5 w-5'} /> Log In
+							</Button>
+							<Button
+								size={'icon-sm'}
+								variant={'outline'}
+								className={'hover:cursor-pointer w-full justify-start px-2 rounded bg-primary'}
+							>
+								<UserPlus className={'h-5 w-5'} /> Create Account
+							</Button>
+						</div>
+					</SidebarFooter>
+				)}
 			</Sidebar>
 		</>
 	)

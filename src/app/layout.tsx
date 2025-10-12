@@ -28,7 +28,7 @@ export default function RootLayout({
 		<GlobalProvider>
 			<AppSidebar />
 
-			<html lang="en">
+			<html lang="en" className={'valorant'}>
 				<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
 			</html>
 		</GlobalProvider>
