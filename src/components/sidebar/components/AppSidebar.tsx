@@ -3,13 +3,13 @@ import { Button } from '@components/ui/button'
 import { Separator } from '@components/ui/separator'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, useSidebar } from '@components/ui/sidebar'
 import { ChevronLeft, CreditCard, Github, Heart, Home, LogIn, Search, UserPlus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
 import { SearchInput } from './SearchInput'
 import { SidebarHint } from './SidebarHint'
 
 export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
 	const { open, setOpen, openMobile, setOpenMobile, isMobile } = useSidebar()
-
 	const isOpen = open || openMobile
 
 	const handleClose = () => {
@@ -18,6 +18,7 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 	}
 
 	const searchRef = useRef<HTMLInputElement>(null)
+	const router = useRouter()
 
 	return (
 		<>
@@ -76,6 +77,7 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 								size={'icon-sm'}
 								variant={'ghost'}
 								className={'hover:cursor-pointer w-full justify-start px-2'}
+								onClick={() => router.push('/')}
 							>
 								<Home className={'h-5 w-5'} /> {isOpen ? 'Home' : null}
 							</Button>
@@ -83,6 +85,7 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 								size={'icon-sm'}
 								variant={'ghost'}
 								className={'hover:cursor-pointer w-full justify-start px-2'}
+								onClick={() => window.open(process.env.NEXT_PUBLIC_REPO_URL, '_blank')}
 							>
 								<Github className={'h-5 w-5'} /> {isOpen ? 'GitHub Repository' : null}
 							</Button>
@@ -90,6 +93,7 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 								size={'icon-sm'}
 								variant={'ghost'}
 								className={'hover:cursor-pointer w-full justify-start px-2'}
+								onClick={() => window.open(process.env.NEXT_PUBLIC_SUPPORT_URL, '_blank')}
 							>
 								<Heart className={'h-5 w-5'} /> {isOpen ? 'Support Me' : null}
 							</Button>
@@ -97,6 +101,7 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 								size={'icon-sm'}
 								variant={'ghost'}
 								className={'hover:cursor-pointer w-full justify-start px-2'}
+								onClick={() => router.push('/plans')}
 							>
 								<CreditCard className={'h-5 w-5'} /> {isOpen ? 'Premium Plans' : null}
 							</Button>
@@ -107,10 +112,20 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 						<SidebarGroup>
 							<div className={'flex flex-col items-center gap-3'}>
 								<Separator className={'my-1'} />
-								<Button size={'icon-sm'} variant={'ghost'} className={'hover:cursor-pointer'}>
+								<Button
+									size={'icon-sm'}
+									variant={'ghost'}
+									className={'hover:cursor-pointer'}
+									onClick={() => router.push('/login')}
+								>
 									<LogIn className={'h-5 w-5'} />
 								</Button>
-								<Button size={'icon-sm'} variant={'ghost'} className={'hover:cursor-pointer'}>
+								<Button
+									size={'icon-sm'}
+									variant={'ghost'}
+									className={'hover:cursor-pointer'}
+									onClick={() => router.push('/signup')}
+								>
 									<UserPlus className={'h-5 w-5'} />
 								</Button>
 							</div>
