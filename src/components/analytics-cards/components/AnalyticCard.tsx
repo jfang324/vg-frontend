@@ -12,7 +12,7 @@ interface StatCardProps {
 	unit?: string
 }
 
-export function StatCard({ title, average, highest, lowest, variance, icon, unit }: StatCardProps) {
+export const AnalyticCard = ({ title, average, highest, lowest, variance, icon, unit }: StatCardProps) => {
 	return (
 		<Card className={'flex flex-row p-4 md:px-6 items-center justify-between'}>
 			<div className={'flex flex-col gap-1'}>

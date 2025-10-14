@@ -21,7 +21,7 @@ export const SearchInput = ({
 	placeholder = 'Search',
 	searchRef,
 	onSearch,
-	onValidation = (value: string) => true
+	onValidation = () => true
 }: SearchInputProps) => {
 	const [value, setValue] = useState('')
 
