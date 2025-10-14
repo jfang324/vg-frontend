@@ -52,12 +52,11 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 					<SidebarGroup>
 						<div className={'flex flex-col items-center gap-3'}>
 							<SearchInput
+								visible={open}
 								label={'Profile Search'}
 								placeholder={'Player name#tag'}
-								search={() => true}
-								validation={() => true}
 								searchRef={searchRef}
-								visible={open}
+								onSearch={(value) => router.push(`/profile/${value}`)}
 							/>
 
 							{!isOpen && (
