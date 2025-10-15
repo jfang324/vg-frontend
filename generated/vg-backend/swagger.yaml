@@ -1,0 +1,630 @@
+openapi: 3.0.0
+paths:
+  /v1/players/{nameTag}/matches:
+    get:
+      operationId: getRecentMatches
+      parameters:
+        - name: region
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidRegions'
+        - name: platform
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidPlatforms'
+        - name: mode
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidModes'
+        - name: limit
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 10
+            type: number
+        - name: nameTag
+          required: true
+          in: path
+          description: 'Must be a valid Valorant name with # separating the name and the tag'
+          schema:
+            example: Hexennacht#NA1
+            type: string
+      responses:
+        '200':
+          description: A list of recent matches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRecentMatchesDto'
+      summary: Get recent matches for a player
+      tags:
+        - Players
+  /v1/players/{nameTag}/profile:
+    get:
+      operationId: getStoredMatches
+      parameters:
+        - name: region
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidRegions'
+        - name: mode
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidModes'
+        - name: page
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            minimum: 1
+            maximum: 10
+            type: number
+        - name: nameTag
+          required: true
+          in: path
+          description: 'Must be a valid Valorant name with # separating the name and the tag'
+          schema:
+            example: Hexennacht#NA1
+            type: string
+      responses:
+        '200':
+          description: A list of stored matches
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStoredMatchesDto'
+      summary: Get stored matches for a player
+      tags:
+        - Players
+  /v1/players/{nameTag}/assets:
+    get:
+      operationId: getCachedAssets
+      parameters:
+        - name: region
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidRegions'
+        - name: platform
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidPlatforms'
+        - name: mode
+          required: false
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidModes'
+        - name: nameTag
+          required: true
+          in: path
+          description: 'Must be a valid Valorant name with # separating the name and the tag'
+          schema:
+            example: Hexennacht#NA1
+            type: string
+      responses:
+        '200':
+          description: A list of cached assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                  format: url
+      summary: Get cached assets for a player
+      tags:
+        - Players
+  /v1/matches/{id}:
+    get:
+      operationId: getMatch
+      parameters:
+        - name: id
+          required: true
+          in: path
+          description: The id of the match
+          schema:
+            example: '1234567890'
+            type: string
+        - name: region
+          required: true
+          in: query
+          schema:
+            $ref: '#/components/schemas/ValidRegions'
+      responses:
+        '200':
+          description: A match by its id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetMatchDto'
+      summary: Get a match by its id and region
+      tags:
+        - Matches
+  /v1/health:
+    get:
+      operationId: healthCheck
+      parameters: []
+      responses:
+        '200':
+          description: A basic message indicating API version and mode
+          content:
+            application/json:
+              schema:
+                type: string
+                example: VG Backend version 1.0 is running in development mode
+      summary: Check the health of the API
+      tags:
+        - Health
+info:
+  title: VG Backend
+  description: VG Backend API
+  version: '1.0'
+  contact: {}
+tags:
+  - name: VG Backend
+    description: ''
+servers: []
+components:
+  schemas:
+    ValidRegions:
+      type: string
+      enum:
+        - na
+        - eu
+        - latam
+        - br
+        - ap
+        - kr
+    ValidPlatforms:
+      type: string
+      enum:
+        - pc
+        - console
+    ValidModes:
+      type: string
+      enum:
+        - competitive
+        - unrated
+        - deathmatch
+        - teamdeathmatch
+    CustomizationDto:
+      type: object
+      properties:
+        card:
+          type: string
+        title:
+          type: string
+        preferredLevelBorder:
+          type: string
+        cardImg:
+          type: string
+      required:
+        - card
+        - title
+        - preferredLevelBorder
+        - cardImg
+    FullRank:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        img:
+          type: string
+      required:
+        - id
+        - name
+    PlayerDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tag:
+          type: string
+        region:
+          type: string
+        level:
+          type: number
+        customization:
+          $ref: '#/components/schemas/CustomizationDto'
+        rank:
+          $ref: '#/components/schemas/FullRank'
+      required:
+        - id
+        - name
+        - tag
+        - region
+        - level
+        - customization
+        - rank
+    MapDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        img:
+          type: string
+      required:
+        - id
+        - name
+    ModeDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - name
+    AgentDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        img:
+          type: string
+      required:
+        - id
+        - name
+    RankDto:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+      required:
+        - id
+        - name
+    AbilityCastsDto:
+      type: object
+      properties:
+        grenade:
+          type: number
+        ability1:
+          type: number
+        ability2:
+          type: number
+        ultimate:
+          type: number
+      required:
+        - grenade
+        - ability1
+        - ability2
+        - ultimate
+    FriendlyFireDto:
+      type: object
+      properties:
+        incoming:
+          type: number
+        outgoing:
+          type: number
+      required:
+        - incoming
+        - outgoing
+    BehaviourDto:
+      type: object
+      properties:
+        afkRounds:
+          type: number
+        friendlyFire:
+          $ref: '#/components/schemas/FriendlyFireDto'
+        roundsInSpawn:
+          type: number
+      required:
+        - afkRounds
+        - friendlyFire
+        - roundsInSpawn
+    SubEconomyDto:
+      type: object
+      properties:
+        overall:
+          type: number
+        average:
+          type: number
+      required:
+        - overall
+        - average
+    EconomyDto:
+      type: object
+      properties:
+        spent:
+          $ref: '#/components/schemas/SubEconomyDto'
+        earned:
+          $ref: '#/components/schemas/SubEconomyDto'
+      required:
+        - spent
+        - earned
+    StatsDto:
+      type: object
+      properties:
+        team:
+          type: string
+        score:
+          type: number
+        kills:
+          type: number
+        deaths:
+          type: number
+        assists:
+          type: number
+        damageDealt:
+          type: number
+        damageTaken:
+          type: number
+        headshots:
+          type: number
+        bodyshots:
+          type: number
+        legshots:
+          type: number
+        agent:
+          $ref: '#/components/schemas/AgentDto'
+        rank:
+          $ref: '#/components/schemas/RankDto'
+        abilityCasts:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/AbilityCastsDto'
+        behavior:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/BehaviourDto'
+        economy:
+          nullable: true
+          allOf:
+            - $ref: '#/components/schemas/EconomyDto'
+      required:
+        - team
+        - score
+        - kills
+        - deaths
+        - assists
+        - damageDealt
+        - damageTaken
+        - headshots
+        - bodyshots
+        - legshots
+        - agent
+        - rank
+        - abilityCasts
+        - behavior
+        - economy
+    RecentMatchDto:
+      type: object
+      properties:
+        id:
+          type: string
+        map:
+          $ref: '#/components/schemas/MapDto'
+        mode:
+          $ref: '#/components/schemas/ModeDto'
+        date:
+          format: date-time
+          type: string
+        winningTeam:
+          type: string
+        redRounds:
+          type: number
+        blueRounds:
+          type: number
+        stats:
+          $ref: '#/components/schemas/StatsDto'
+      required:
+        - id
+        - map
+        - mode
+        - date
+        - winningTeam
+        - redRounds
+        - blueRounds
+        - stats
+    RecentMatchesPayloadDto:
+      type: object
+      properties:
+        player:
+          $ref: '#/components/schemas/PlayerDto'
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecentMatchDto'
+      required:
+        - player
+        - matches
+    GetRecentMatchesDto:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/RecentMatchesPayloadDto'
+      required:
+        - message
+        - data
+    StoredMatchStatsDto:
+      type: object
+      properties:
+        team:
+          type: string
+        score:
+          type: number
+        kills:
+          type: number
+        deaths:
+          type: number
+        assists:
+          type: number
+        damageDealt:
+          type: number
+        damageTaken:
+          type: number
+        headshots:
+          type: number
+        bodyshots:
+          type: number
+        legshots:
+          type: number
+        agent:
+          $ref: '#/components/schemas/AgentDto'
+        rank:
+          $ref: '#/components/schemas/RankDto'
+      required:
+        - team
+        - score
+        - kills
+        - deaths
+        - assists
+        - damageDealt
+        - damageTaken
+        - headshots
+        - bodyshots
+        - legshots
+        - agent
+        - rank
+    StoredMatchDto:
+      type: object
+      properties:
+        id:
+          type: string
+        map:
+          $ref: '#/components/schemas/MapDto'
+        mode:
+          $ref: '#/components/schemas/ModeDto'
+        date:
+          format: date-time
+          type: string
+        winningTeam:
+          type: string
+        redRounds:
+          type: number
+        blueRounds:
+          type: number
+        stats:
+          $ref: '#/components/schemas/StoredMatchStatsDto'
+      required:
+        - id
+        - map
+        - mode
+        - date
+        - winningTeam
+        - redRounds
+        - blueRounds
+        - stats
+    StoredMatchPayloadDto:
+      type: object
+      properties:
+        player:
+          $ref: '#/components/schemas/PlayerDto'
+        matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/StoredMatchDto'
+      required:
+        - player
+        - matches
+    GetStoredMatchesDto:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/StoredMatchPayloadDto'
+      required:
+        - message
+        - data
+    MatchDto:
+      type: object
+      properties:
+        id:
+          type: string
+        map:
+          $ref: '#/components/schemas/MapDto'
+        mode:
+          $ref: '#/components/schemas/ModeDto'
+        date:
+          format: date-time
+          type: string
+        winningTeam:
+          type: string
+        redRounds:
+          type: number
+        blueRounds:
+          type: number
+      required:
+        - id
+        - map
+        - mode
+        - date
+        - winningTeam
+        - redRounds
+        - blueRounds
+    MatchPerformanceDto:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        tag:
+          type: string
+        region:
+          type: string
+        level:
+          type: number
+        customization:
+          $ref: '#/components/schemas/CustomizationDto'
+        rank:
+          $ref: '#/components/schemas/FullRank'
+        stats:
+          $ref: '#/components/schemas/StatsDto'
+      required:
+        - id
+        - name
+        - tag
+        - region
+        - level
+        - customization
+        - rank
+        - stats
+    GetMatchPayloadDto:
+      type: object
+      properties:
+        match:
+          $ref: '#/components/schemas/MatchDto'
+        players:
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchPerformanceDto'
+      required:
+        - match
+        - players
+    GetMatchDto:
+      type: object
+      properties:
+        message:
+          type: string
+        data:
+          $ref: '#/components/schemas/GetMatchPayloadDto'
+      required:
+        - message
+        - data

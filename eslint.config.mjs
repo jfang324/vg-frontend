@@ -14,7 +14,7 @@ const eslintConfig = [
     plugins: ["unused-imports"],
     extends: ["next/core-web-vitals", "next/typescript", "prettier"],
     rules: {
-      "no-console": "warn",
+      "no-console": ['error', { allow: ['warn', 'error'] }],
       "unused-imports/no-unused-imports": "error",
       "unused-imports/no-unused-vars": [
         "warn",
@@ -35,6 +35,7 @@ const eslintConfig = [
       "build/**",
       "next-env.d.ts",
       "src/components/ui/**",
+      "generated/**",
     ],
   },
 ];

@@ -8,20 +8,20 @@ import { toast } from 'sonner'
 
 interface SearchInputProps {
 	label: string
-	placeholder?: string
-	search: (value: string) => void
-	validation?: (value: string) => boolean
-	searchRef?: RefObject<HTMLInputElement | null>
 	visible?: boolean
+	placeholder?: string
+	searchRef?: RefObject<HTMLInputElement | null>
+	onSearch: (value: string) => void
+	onValidation?: (value: string) => boolean
 }
 
 export const SearchInput = ({
 	label,
-	placeholder,
-	search,
-	validation = () => true,
+	visible = true,
+	placeholder = 'Search',
 	searchRef,
-	visible = true
+	onSearch,
+	onValidation = () => true
 }: SearchInputProps) => {
 	const [value, setValue] = useState('')
 
@@ -29,12 +29,12 @@ export const SearchInput = ({
 		e.preventDefault()
 		const input = value.trim()
 
-		if (!input || !validation(input)) {
+		if (!input || !onValidation(input)) {
 			toast('Please enter a valid value')
 			return
 		}
 
-		return search(input)
+		return onSearch(input)
 	}
 
 	return (
