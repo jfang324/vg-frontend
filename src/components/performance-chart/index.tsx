@@ -1,48 +1,44 @@
 'use client'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { ChartConfig } from '@components/ui/chart'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs'
 import { MetricKey, METRICS } from '@constants/metrics'
-import { ModeKey, MODES } from '@constants/modes'
-import { mockPlayerData } from '@lib/mock-data'
+import { usePlayers } from '@hooks/usePlayers'
 import { useState } from 'react'
 import { Chart } from './components/Chart'
 
 export const PerformanceChart = () => {
-	const [mode, setMode] = useState<ModeKey>('competitive')
+	const { players } = usePlayers()
 	const [metric, setMetric] = useState<MetricKey>('acs')
 
-	const players = Object.keys(mockPlayerData)
+	const visiblePlayers = players.filter((player) => player.metadata.visibility)
 
-	const config = {
-		TenZ: {
-			label: 'TenZ',
-			color: '#2563eb'
-		},
-		Aspas: {
-			label: 'Aspas',
-			color: '#f59e0b'
+	const config = visiblePlayers.reduce((acc, player) => {
+		acc[player.metadata.nameTag] = {
+			label: player.metadata.nameTag,
+			color: player.metadata.color
 		}
-	} satisfies ChartConfig
+		return acc
+	}, {} as ChartConfig)
 
 	const data: Record<string, number>[] = []
 
 	for (const player of players) {
-		const playerData = mockPlayerData[player as keyof typeof mockPlayerData]
+		const nameTag = player.metadata.nameTag
+		const matches = player.matches
 
-		for (let i = 0; i < playerData.matches.length; i++) {
-			const match = playerData.matches[i]
+		for (let i = 0; i < matches.length; i++) {
+			const match = matches[i]
 
-			if (data.length < i) {
+			if (data.length < i + 1) {
 				data.push({
-					match: i,
-					[player]: match[metric]
+					match: i + 1,
+					[nameTag]: match[metric]
 				})
 			} else {
 				data[i] = {
 					...data[i],
-					[player]: match[metric]
+					[nameTag]: match[metric]
 				}
 			}
 		}
@@ -55,24 +51,6 @@ export const PerformanceChart = () => {
 					<h1 className={'font-mono text-2xl font-bold text-foreground'}>{METRICS[metric].fullTitle}</h1>
 					<p className={'mt-1 text-sm text-muted-foreground'}>{METRICS[metric].description}</p>
 				</span>
-				<div className={'w-full md:w-1/5 py-4 md:py-0 my-auto'}>
-					<div
-						className={'h-full flex flex-row gap-4 items-center md:justify-center md:w-fit md:float-right'}
-					>
-						<Select value={mode} onValueChange={(value) => setMode(value as ModeKey)}>
-							<SelectTrigger className="w-full border-primary/50 bg-primary/10 font-mono text-sm text-primary md:w-[180px] hover:cursor-pointer">
-								<SelectValue placeholder={'Select a mode'} />
-							</SelectTrigger>
-							<SelectContent>
-								{Object.keys(MODES).map((mode) => (
-									<SelectItem value={mode} key={mode}>
-										{MODES[mode as ModeKey].fullTitle}
-									</SelectItem>
-								))}
-							</SelectContent>
-						</Select>
-					</div>
-				</div>
 			</CardHeader>
 
 			<CardContent className={'w-full flex flex-col gap-4'}>

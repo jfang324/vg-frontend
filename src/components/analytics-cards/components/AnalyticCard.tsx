@@ -1,4 +1,3 @@
-'use client'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 
@@ -10,13 +9,16 @@ interface StatCardProps {
 	variance: number
 	icon: React.ReactNode
 	unit?: string
+	onClick: () => void
 }
 
-export const AnalyticCard = ({ title, average, highest, lowest, variance, icon, unit }: StatCardProps) => {
+export const AnalyticCard = ({ title, average, highest, lowest, variance, icon, unit, onClick }: StatCardProps) => {
 	return (
-		<Card className={'flex flex-row p-4 md:px-6 items-center justify-between'}>
+		<Card className={'flex flex-row p-4 items-center justify-around md:justify-between'}>
 			<div className={'flex flex-col gap-1'}>
-				<h6 className={'font-mono text-muted-foreground tracking-tight text-sm h-fit my-1 md:my-2'}>{title}</h6>
+				<h6 className={'font-mono text-muted-foreground tracking-tight text-sm h-fit my-1 md:my-2 text-nowrap'}>
+					{title}
+				</h6>
 				<p className={'font-bold text-foreground tracking-wide text-3xl'}>
 					{new Intl.NumberFormat('en-US', {
 						maximumFractionDigits: 2
@@ -24,7 +26,7 @@ export const AnalyticCard = ({ title, average, highest, lowest, variance, icon, 
 					&nbsp;
 					<span className={'text-primary text-xs'}>&plusmn;{variance.toFixed(1)}%</span>
 				</p>
-				<div className={'text-xs'}>
+				<div className={'text-xs flex flex-col pt-1'}>
 					<p className={'text-muted-foreground'}>
 						highest: &nbsp;
 						<span className={'text-primary'}>
@@ -51,6 +53,7 @@ export const AnalyticCard = ({ title, average, highest, lowest, variance, icon, 
 					className={'h-fit w-fit p-1 text-xs rounded hover:cursor-pointer'}
 					size={'icon'}
 					variant={'outline'}
+					onClick={onClick}
 				>
 					Rankings
 				</Button>
