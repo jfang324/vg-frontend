@@ -20,6 +20,10 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 	const searchRef = useRef<HTMLInputElement>(null)
 	const router = useRouter()
 
+	const handleSearch = (region: string, value: string) => {
+		router.push(`/profiles/${region}/${encodeURIComponent(value)}`)
+	}
+
 	return (
 		<>
 			<SidebarHint />
@@ -52,11 +56,11 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 					<SidebarGroup>
 						<div className={'flex flex-col items-center gap-3'}>
 							<SearchInput
-								visible={open}
+								visible={isOpen}
 								label={'Profile Search'}
 								placeholder={'Player name#tag'}
 								searchRef={searchRef}
-								onSearch={(value) => router.push(`/profile/${value}`)}
+								onSearch={handleSearch}
 							/>
 
 							{!isOpen && (

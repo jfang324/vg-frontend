@@ -1,4 +1,4 @@
-import { RecentMatchesPayloadDto } from '@generated/vg-backend/api-client'
+import { RecentMatchesPayloadDto, StoredMatchPayloadDto } from '@generated/vg-backend/api-client'
 import { MatchPerformance, PlayerMetadata } from '@lib/types/player'
 import { GraphMetrics } from '../../types/graph-metrics.type'
 
@@ -6,7 +6,7 @@ export class Player {
 	private readonly metadata: PlayerMetadata
 	private readonly matches: MatchPerformance[]
 
-	constructor(data: RecentMatchesPayloadDto) {
+	constructor(data: RecentMatchesPayloadDto | StoredMatchPayloadDto) {
 		this.metadata = {
 			id: data.player.id,
 			name: data.player.name,
@@ -100,5 +100,21 @@ export class Player {
 			adr: averages.reduce((acc, match) => acc + match.adr, 0) / averages.length,
 			dd: averages.reduce((acc, match) => acc + match.dd, 0) / averages.length
 		}
+	}
+
+	/**
+	 *  Get the player's metadata
+	 * @returns The player's metadata
+	 */
+	getMetadata(): PlayerMetadata {
+		return this.metadata
+	}
+
+	/**
+	 * Get the player's recent matches
+	 * @returns The player's recent matches
+	 */
+	getMatches(): MatchPerformance[] {
+		return this.matches
 	}
 }

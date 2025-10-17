@@ -7,7 +7,7 @@ interface PlayerTrackerProps {
 	pendingPlayer: GraphedPlayer | null
 	onRemove: (nameTag: string) => void
 	onToggleVisibility: (nameTag: string) => void
-	onProfileClick: (nameTag: string) => void
+	onProfileClick: (region: string, nameTag: string) => void
 }
 
 export const PlayerTracker = ({
@@ -31,7 +31,7 @@ export const PlayerTracker = ({
 						key={player.metadata.nameTag}
 						pending={false}
 						player={player}
-						onProfileClick={() => onProfileClick(player.metadata.nameTag)}
+						onProfileClick={() => onProfileClick(player.metadata.region, player.metadata.nameTag)}
 						onRemove={() => onRemove(player.metadata.nameTag)}
 						onToggleVisibility={() => onToggleVisibility(player.metadata.nameTag)}
 					/>
@@ -40,7 +40,9 @@ export const PlayerTracker = ({
 					<PlayerEntry
 						player={pendingPlayer}
 						pending={true}
-						onProfileClick={() => onProfileClick(pendingPlayer.metadata.nameTag)}
+						onProfileClick={() =>
+							onProfileClick(pendingPlayer.metadata.region, pendingPlayer.metadata.nameTag)
+						}
 						onRemove={() => onRemove(pendingPlayer.metadata.nameTag)}
 						onToggleVisibility={() => onToggleVisibility(pendingPlayer.metadata.nameTag)}
 					/>

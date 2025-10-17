@@ -17,7 +17,7 @@ export const AnalyticsCards = () => {
 	}>({ metric: 'acs', data: [] })
 
 	useEffect(() => {
-		const analytics = calculatePerformanceAnalytics()
+		const analytics = calculatePerformanceAnalytics()!
 
 		setAnalytics(analytics)
 	}, [players, calculatePerformanceAnalytics])
