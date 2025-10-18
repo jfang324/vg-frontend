@@ -581,30 +581,12 @@ components:
     MatchPerformanceDto:
       type: object
       properties:
-        id:
-          type: string
-        name:
-          type: string
-        tag:
-          type: string
-        region:
-          type: string
-        level:
-          type: number
-        customization:
-          $ref: '#/components/schemas/CustomizationDto'
-        rank:
-          $ref: '#/components/schemas/FullRank'
+        player:
+          $ref: '#/components/schemas/PlayerDto'
         stats:
           $ref: '#/components/schemas/StatsDto'
       required:
-        - id
-        - name
-        - tag
-        - region
-        - level
-        - customization
-        - rank
+        - player
         - stats
     GetMatchPayloadDto:
       type: object

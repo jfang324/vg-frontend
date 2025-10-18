@@ -9,7 +9,7 @@ import { calculateAgentMetrics, stringToColor } from '@lib/utils'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useState } from 'react'
 import { GraphMetrics } from '../../types/graph-metrics.type'
-import { Chart } from './components/chart'
+import { Chart } from './components/Chart'
 
 interface RadarChartProps {
 	metrics?: GraphMetrics
@@ -63,7 +63,7 @@ export const AgentRadarChart = ({
 			<CardContent className={'tracking-tight flex flex-col md:flex-row h-full gap-2 md:gap-4'}>
 				<div className={'flex flex-col gap-2 md:gap-4 tracking-tighter'}>
 					<h1 className={'text-foreground text-xl font-semibold'}>PERFORMANCE OVERVIEW</h1>
-					<div className={'flex flex-row md:flex-col gap-4 md:gap-2'}>
+					<div className={'flex flex-row flex-wrap md:flex-col gap-4 md:gap-2'}>
 						{Array.from(uniqueAgents).map((agent) => (
 							<div className={'flex flex-row gap-2'} key={agent}>
 								<Checkbox

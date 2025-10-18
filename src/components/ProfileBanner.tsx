@@ -20,7 +20,13 @@ export const ProfileBanner = ({ nameTag, avatarUrl, rank, level, recentWins = []
 			<div className={'w-fit flex flex-row gap-2 md:gap-4'}>
 				<div className="w-20 h-20 md:w-25 md:h-25 border-2 border-foreground rounded-full overflow-hidden relative">
 					{avatarUrl ? (
-						<Image src={avatarUrl} alt={'player card'} fill className={'object-cover object-left-top'} />
+						<Image
+							src={avatarUrl}
+							alt={'player card'}
+							fill
+							className={'object-cover object-left-top'}
+							sizes={'200px'}
+						/>
 					) : null}
 				</div>
 				<div className={'font-mono mt-auto flex flex-col gap-1'}>

@@ -117,4 +117,19 @@ export class Player {
 	getMatches(): MatchPerformance[] {
 		return this.matches
 	}
+
+	/**
+	 * Get the player's match frequency
+	 * @returns The player's match frequency
+	 */
+	getMatchFrequency(): { date: string; count: number }[] {
+		const map = new Map<string, number>()
+
+		for (const match of this.matches) {
+			const day = match.date.toISOString().split('T')[0]
+			map.set(day, (map.get(day) ?? 0) + 1)
+		}
+
+		return [...map.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, count]) => ({ date, count }))
+	}
 }
