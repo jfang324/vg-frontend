@@ -7,20 +7,22 @@ import { useDrag } from '@use-gesture/react'
 export const useGestures = () => {
 	const { isMobile, setOpenMobile } = useSidebar()
 
-	const bind = useDrag(({ last, velocity, direction }) => {
-		if (!last || !isMobile) return
+	const bind = useDrag(
+		({ last, velocity, direction }) => {
+			if (!last || !isMobile) return
 
-		const [horizontalDirection] = direction
-		const [horizontalVelocity] = velocity
+			const [horizontalDirection] = direction
+			const [horizontalVelocity] = velocity
 
-		if (horizontalDirection === -1 && horizontalVelocity > 0.25) {
-			setOpenMobile(false)
+			if (horizontalDirection === 1 && horizontalVelocity > 0.25) {
+				setOpenMobile(true)
+			}
+		},
+		{
+			filterTaps: true,
+			axis: 'x'
 		}
-
-		if (horizontalDirection === 1 && horizontalVelocity > 0.25) {
-			setOpenMobile(true)
-		}
-	})
+	)
 
 	return bind
 }
