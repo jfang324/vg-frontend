@@ -11,10 +11,7 @@ export class PlayerClient {
 		}
 
 		const config = new Configuration({
-			basePath,
-			baseOptions: {
-				withCredentials: true
-			}
+			basePath
 		})
 
 		this.generatedClient = new PlayersApi(config)

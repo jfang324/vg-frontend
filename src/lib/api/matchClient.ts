@@ -11,10 +11,7 @@ export class MatchClient {
 		}
 
 		const configuration = new Configuration({
-			basePath,
-			baseOptions: {
-				withCredentials: true
-			}
+			basePath
 		})
 
 		this.generatedClient = new MatchesApi(configuration)

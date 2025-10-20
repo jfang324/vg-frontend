@@ -11,10 +11,7 @@ export class ProfileClient {
 		}
 
 		const config = new Configuration({
-			basePath,
-			baseOptions: {
-				withCredentials: true
-			}
+			basePath
 		})
 
 		this.generatedClient = new PlayersApi(config)
