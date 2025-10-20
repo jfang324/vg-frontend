@@ -2,6 +2,7 @@
 import { playerClient } from '@lib/api/playerClient'
 import { profileClient } from '@lib/api/profileClient'
 import { Player } from '@lib/models/Player'
+import { MatchPerformance } from '@lib/types/player'
 import { createContext, useCallback, useMemo, useState } from 'react'
 
 interface ProfileProviderProps {
@@ -12,7 +13,8 @@ export interface ProfileContext {
 	isLoading: boolean
 	error: Error | null
 	player: Player | null
-	fetchProfile: (region: string, nameTag: string, page: number) => Promise<void>
+	fetchProfile: (region: string, nameTag: string) => Promise<void>
+	fetchMatches: (region: string, nameTag: string, page: number) => Promise<void>
 	refreshProfile: (region: string, nameTag: string) => Promise<void>
 }
 
@@ -27,15 +29,15 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 	/**
 	 * Fetch player profile data
 	 */
-	const fetchProfile = useCallback(async (region: string, nameTag: string, page: number) => {
+	const fetchProfile = useCallback(async (region: string, nameTag: string) => {
 		try {
 			setIsLoading(true)
 
-			const response = await profileClient.getPlayerProfile(nameTag, region, 'competitive', page)
+			const response = await profileClient.getPlayerProfile(nameTag, region, 'competitive')
 
 			if (!response) throw new Error('No response from API')
 
-			const player = new Player(response.data)
+			const player = Player.fromApiData(response.data)
 
 			setPlayer(player)
 			setError(null)
@@ -58,7 +60,7 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 
 			if (!response) throw new Error('No response from API')
 
-			const player = new Player(response.data)
+			const player = Player.fromApiData(response.data)
 
 			setPlayer(player)
 			setError(null)
@@ -70,15 +72,54 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 		}
 	}, [])
 
+	/**
+	 * Fetch more matches and add them to the player
+	 */
+	const fetchMatches = useCallback(
+		async (region: string, nameTag: string, page: number) => {
+			try {
+				setIsLoading(true)
+
+				const response = await profileClient.getPlayerMatches(nameTag, region, 'competitive', page)
+
+				if (!response) throw new Error('No response from API')
+
+				const newData = Player.fromApiData(response.data)
+
+				let newPlayer: Player
+				let newMatches: MatchPerformance[]
+
+				if (player) {
+					newPlayer = Player.fromExistingPlayer(player)
+					newMatches = newData.getMatches()
+				} else {
+					newPlayer = newData
+					newMatches = []
+				}
+
+				newPlayer.addMatches(newMatches)
+
+				setPlayer(newPlayer)
+				setError(null)
+			} catch (error: unknown) {
+				console.error(error)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		[player]
+	)
+
 	const contextValue = useMemo(
 		() => ({
 			isLoading,
 			error,
 			player,
 			fetchProfile,
+			fetchMatches,
 			refreshProfile
 		}),
-		[isLoading, error, player, fetchProfile, refreshProfile]
+		[isLoading, error, player, fetchProfile, fetchMatches, refreshProfile]
 	)
 
 	return <ProfileContext.Provider value={contextValue}>{children}</ProfileContext.Provider>

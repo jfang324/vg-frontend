@@ -43,16 +43,7 @@ export class Match {
 						id: stats.agent.id,
 						name: stats.agent.name,
 						img: stats.agent.img
-					},
-					rank: {
-						id: stats.rank.id,
-						name: stats.rank.name
 					}
-				},
-				agent: {
-					id: stats.agent.id,
-					name: stats.agent.name,
-					img: stats.agent.img
 				}
 			}
 		})

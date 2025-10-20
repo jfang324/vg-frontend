@@ -2,6 +2,7 @@ import { GlobalProvider } from '@components/providers/GlobalProvider'
 import { AppSidebar } from '@components/sidebar'
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 
 const geistSans = Geist({
@@ -32,8 +33,17 @@ export default function RootLayout({
 	return (
 		<GlobalProvider>
 			<AppSidebar />
-
 			<html lang="en" className={'valorant'}>
+				<head>
+					<Script async src="https://www.googletagmanager.com/gtag/js?id=G-1HBGP08844"></Script>
+					<Script id="google-analytics">
+						{`
+                        	window.dataLayer = window.dataLayer || []
+							function gtag() {dataLayer.push(arguments)}
+							gtag('js', new Date())
+                    	`}
+					</Script>
+				</head>
 				<body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>{children}</body>
 			</html>
 		</GlobalProvider>

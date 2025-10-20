@@ -6,8 +6,13 @@ export class Player {
 	private readonly metadata: PlayerMetadata
 	private readonly matches: MatchPerformance[]
 
-	constructor(data: RecentMatchesPayloadDto | StoredMatchPayloadDto) {
-		this.metadata = {
+	constructor(metdata: PlayerMetadata, matches: MatchPerformance[] = []) {
+		this.metadata = metdata
+		this.matches = matches
+	}
+
+	static fromApiData(data: RecentMatchesPayloadDto | StoredMatchPayloadDto) {
+		const metadata = {
 			id: data.player.id,
 			name: data.player.name,
 			tag: data.player.tag,
@@ -26,7 +31,7 @@ export class Player {
 			}
 		}
 
-		this.matches = data.matches.map((match) => ({
+		const matches = data.matches.map((match) => ({
 			id: match.id,
 			date: new Date(match.date),
 			winningTeam: match.winningTeam,
@@ -68,6 +73,12 @@ export class Player {
 				img: match.stats.agent.img
 			}
 		}))
+
+		return new Player(metadata, matches)
+	}
+
+	static fromExistingPlayer(player: Player) {
+		return new Player(player.getMetadata(), player.getMatches())
 	}
 
 	/**
@@ -131,5 +142,13 @@ export class Player {
 		}
 
 		return [...map.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, count]) => ({ date, count }))
+	}
+
+	/**
+	 * Add matches to the player's recent matches
+	 * @param matches The matches to add
+	 */
+	addMatches(matches: MatchPerformance[]) {
+		this.matches.push(...matches)
 	}
 }
