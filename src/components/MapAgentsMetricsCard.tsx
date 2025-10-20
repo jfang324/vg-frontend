@@ -33,7 +33,10 @@ export const MapAgentsMetricsCard = ({ matches }: MapAgentsMetricsCardProps) => 
 	}
 
 	return (
-		<Card className={'w-full h-full md:flex-1 gap-2'}>
+		<Card
+			className={'w-full h-full md:flex-1 gap-2 md:max-h-[350px] overflow-y-scroll'}
+			style={{ scrollbarWidth: 'none' }}
+		>
 			<CardHeader className={'text-foreground text-xl font-semibold'}>MAP & AGENT STATS</CardHeader>
 			<CardContent className={'text-xs tracking-tight flex flex-col gap-2 md:gap-4'}>
 				<div className={'flex flex-col gap-0.5'}>
