@@ -17,7 +17,7 @@ export const AnalyticsCards = () => {
 	}>({ metric: 'acs', data: [] })
 
 	useEffect(() => {
-		const analytics = calculatePerformanceAnalytics()
+		const analytics = calculatePerformanceAnalytics()!
 
 		setAnalytics(analytics)
 	}, [players, calculatePerformanceAnalytics])
@@ -79,7 +79,7 @@ export const AnalyticsCards = () => {
 				)
 			})}
 			<Dialog open={dialogOpen} onOpenChange={(open) => !open && setDialogOpen(false)}>
-				<DialogContent className="border-border bg-card sm:max-w-md">
+				<DialogContent className="bg-card">
 					<DialogHeader>
 						<DialogTitle className={'w-full items-center'}>
 							<span className={'w-fit flex flex-row gap-3 mx-auto'}>

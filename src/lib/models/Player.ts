@@ -1,4 +1,4 @@
-import { RecentMatchesPayloadDto } from '@generated/vg-backend/api-client'
+import { RecentMatchesPayloadDto, StoredMatchPayloadDto } from '@generated/vg-backend/api-client'
 import { MatchPerformance, PlayerMetadata } from '@lib/types/player'
 import { GraphMetrics } from '../../types/graph-metrics.type'
 
@@ -6,7 +6,7 @@ export class Player {
 	private readonly metadata: PlayerMetadata
 	private readonly matches: MatchPerformance[]
 
-	constructor(data: RecentMatchesPayloadDto) {
+	constructor(data: RecentMatchesPayloadDto | StoredMatchPayloadDto) {
 		this.metadata = {
 			id: data.player.id,
 			name: data.player.name,
@@ -100,5 +100,36 @@ export class Player {
 			adr: averages.reduce((acc, match) => acc + match.adr, 0) / averages.length,
 			dd: averages.reduce((acc, match) => acc + match.dd, 0) / averages.length
 		}
+	}
+
+	/**
+	 *  Get the player's metadata
+	 * @returns The player's metadata
+	 */
+	getMetadata(): PlayerMetadata {
+		return this.metadata
+	}
+
+	/**
+	 * Get the player's recent matches
+	 * @returns The player's recent matches
+	 */
+	getMatches(): MatchPerformance[] {
+		return this.matches
+	}
+
+	/**
+	 * Get the player's match frequency
+	 * @returns The player's match frequency
+	 */
+	getMatchFrequency(): { date: string; count: number }[] {
+		const map = new Map<string, number>()
+
+		for (const match of this.matches) {
+			const day = match.date.toISOString().split('T')[0]
+			map.set(day, (map.get(day) ?? 0) + 1)
+		}
+
+		return [...map.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([date, count]) => ({ date, count }))
 	}
 }

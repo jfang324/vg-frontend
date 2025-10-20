@@ -28,8 +28,6 @@ jobs:
               with:
                   path: node_modules
                   key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: |
-                      ${{ runner.os }}-node-
 
             - name: Install dependencies
               run: npm ci
@@ -70,8 +68,6 @@ jobs:
               with:
                   path: generated/vg-backend/api-client
                   key: ${{ runner.os }}-api-client-${{ hashFiles('**/generated/vg-backend/api-client/swagger.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-api-client-
 
             - name: Build code
               run: npm run build

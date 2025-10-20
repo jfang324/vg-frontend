@@ -1,7 +1,10 @@
 'use client'
 import { Button } from '@components/ui/button'
 import { Separator } from '@components/ui/separator'
+//eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-imports
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, useSidebar } from '@components/ui/sidebar'
+
+//eslint-disable-next-line @typescript-eslint/no-unused-vars, unused-imports/no-unused-imports
 import { ChevronLeft, CreditCard, Github, Heart, Home, LogIn, Search, UserPlus } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
@@ -19,6 +22,10 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 
 	const searchRef = useRef<HTMLInputElement>(null)
 	const router = useRouter()
+
+	const handleSearch = (region: string, value: string) => {
+		router.push(`/profiles/${region}/${encodeURIComponent(value)}`)
+	}
 
 	return (
 		<>
@@ -52,11 +59,11 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 					<SidebarGroup>
 						<div className={'flex flex-col items-center gap-3'}>
 							<SearchInput
-								visible={open}
+								visible={isOpen}
 								label={'Profile Search'}
 								placeholder={'Player name#tag'}
 								searchRef={searchRef}
-								onSearch={(value) => router.push(`/profile/${value}`)}
+								onSearch={handleSearch}
 							/>
 
 							{!isOpen && (
@@ -88,6 +95,8 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 							>
 								<Github className={'h-5 w-5'} /> {isOpen ? 'GitHub Repository' : null}
 							</Button>
+							{/* 
+							TODO: Add basic donation & subscription pages
 							<Button
 								size={'icon-sm'}
 								variant={'ghost'}
@@ -103,10 +112,12 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 								onClick={() => router.push('/plans')}
 							>
 								<CreditCard className={'h-5 w-5'} /> {isOpen ? 'Premium Plans' : null}
-							</Button>
+							</Button> */}
 						</div>
 					</SidebarGroup>
 
+					{/* 
+						TODO: Add basic login & signup functionality
 					{!isOpen && (
 						<SidebarGroup>
 							<div className={'flex flex-col items-center gap-3'}>
@@ -129,9 +140,11 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 								</Button>
 							</div>
 						</SidebarGroup>
-					)}
+					)} */}
 				</SidebarContent>
 
+				{/* 
+				TODO: Add basic login & signup functionality
 				{isOpen && (
 					<SidebarFooter>
 						<Separator className={'mb-2'} />
@@ -152,7 +165,7 @@ export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) =
 							</Button>
 						</div>
 					</SidebarFooter>
-				)}
+				)} */}
 			</Sidebar>
 		</>
 	)

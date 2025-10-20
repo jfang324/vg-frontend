@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { PlayerAnalytics } from '../types/player-analytics.type'
 import { GraphMetrics } from './../types/graph-metrics.type'
+import { MatchPerformance } from './types/player'
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
@@ -164,4 +165,92 @@ export function calculateOverallPerformanceAnalytics(averages: GraphMetrics[]) {
 					100
 		}
 	}
+}
+
+/**
+ * Calculate the metrics for each agent in the selected agents set
+ * @param matches The list of matches
+ * @param metrics The overall metrics
+ * @param selectedAgents The selected agents
+ * @returns The metrics for each agent
+ */
+export function calculateAgentMetrics(matches: MatchPerformance[], metrics: GraphMetrics, selectedAgents: Set<string>) {
+	const baseData: Record<keyof GraphMetrics, Record<string, number>> = {
+		acs: {
+			all: metrics.acs
+		},
+		hs: {
+			all: metrics.hs
+		},
+		kd: {
+			all: metrics.kd
+		},
+		kda: {
+			all: metrics.kda
+		},
+		adr: {
+			all: metrics.adr
+		},
+		dd: {
+			all: metrics.dd
+		}
+	}
+	for (const agent of selectedAgents) {
+		let totalAcs = 0
+		let totalHs = 0
+		let totalKd = 0
+		let totalKda = 0
+		let totalAdr = 0
+		let totalDd = 0
+		let totalMatches = 0
+
+		for (const match of matches) {
+			if (match.stats.agent.name === agent) {
+				totalMatches++
+				totalAcs += match.stats.score / (match.redRounds + match.blueRounds)
+				totalHs +=
+					(match.stats.headshots / (match.stats.headshots + match.stats.bodyshots + match.stats.legshots)) *
+					100
+				totalKd += match.stats.kills / match.stats.deaths
+				totalKda += (match.stats.kills + match.stats.assists) / match.stats.deaths
+				totalAdr += match.stats.damageDealt / (match.redRounds + match.blueRounds)
+				totalDd += (match.stats.damageDealt - match.stats.damageTaken) / (match.redRounds + match.blueRounds)
+			}
+		}
+
+		baseData['acs' as keyof GraphMetrics] = {
+			...baseData['acs'],
+			[agent]: totalAcs / totalMatches
+		}
+
+		baseData['hs' as keyof GraphMetrics] = {
+			...baseData['hs'],
+			[agent]: totalHs / totalMatches
+		}
+
+		baseData['kd' as keyof GraphMetrics] = {
+			...baseData['kd'],
+			[agent]: totalKd / totalMatches
+		}
+
+		baseData['kda' as keyof GraphMetrics] = {
+			...baseData['kda'],
+			[agent]: totalKda / totalMatches
+		}
+
+		baseData['adr' as keyof GraphMetrics] = {
+			...baseData['adr'],
+			[agent]: totalAdr / totalMatches
+		}
+
+		baseData['dd' as keyof GraphMetrics] = {
+			...baseData['dd'],
+			[agent]: totalDd / totalMatches
+		}
+	}
+
+	return Object.keys(baseData).map((metric) => ({
+		metric,
+		...baseData[metric as keyof GraphMetrics]
+	}))
 }

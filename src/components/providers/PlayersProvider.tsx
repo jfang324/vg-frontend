@@ -15,7 +15,7 @@ export interface PlayersContext {
 	isLoading: boolean
 	error: Error | null
 	players: GraphedPlayer[]
-	calculatePerformanceAnalytics: () => PlayerAnalytics
+	calculatePerformanceAnalytics: () => PlayerAnalytics | undefined
 	fetchPlayer: (nameTag: string, limit: number, region: string, mode: string, platform: string) => Promise<void>
 	removePlayer: (nameTag: string) => void
 	togglePlayerVisibility: (nameTag: string) => void
@@ -54,6 +54,7 @@ export const PlayersProvider = ({ children }: PlayersProviderProps) => {
 				setGraphMetadata((prev) => {
 					const newGraphMetadata = new Map(prev)
 					newGraphMetadata.set(nameTag, {
+						region,
 						nameTag,
 						color: stringToColor(nameTag),
 						visibility: true
@@ -77,13 +78,18 @@ export const PlayersProvider = ({ children }: PlayersProviderProps) => {
 	 * Calculate overall performance analytics for all players
 	 */
 	const calculatePerformanceAnalytics = useCallback(() => {
-		const averages = [...players.keys()].map((nameTag) =>
-			players.get(nameTag)!.calculateAveragePerformanceMetrics()
-		)
+		try {
+			const averages = [...players.keys()].map((nameTag) =>
+				players.get(nameTag)!.calculateAveragePerformanceMetrics()
+			)
 
-		const analytics = calculateOverallPerformanceAnalytics(averages)
+			const analytics = calculateOverallPerformanceAnalytics(averages)
 
-		return analytics
+			return analytics
+		} catch (error: unknown) {
+			console.error(error as Error)
+			setError(error as Error)
+		}
 	}, [players])
 
 	/**
@@ -105,7 +111,8 @@ export const PlayersProvider = ({ children }: PlayersProviderProps) => {
 				return newGraphMetadata
 			})
 		} catch (error: unknown) {
-			console.error(error)
+			console.error(error as Error)
+			setError(error as Error)
 		}
 	}, [])
 
@@ -128,7 +135,8 @@ export const PlayersProvider = ({ children }: PlayersProviderProps) => {
 				return newGraphMetadata
 			})
 		} catch (error: unknown) {
-			console.error(error)
+			console.error(error as Error)
+			setError(error as Error)
 		}
 	}, [])
 

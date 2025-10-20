@@ -20,6 +20,9 @@ export class PlayerClient {
 		this.generatedClient = new PlayersApi(config)
 	}
 
+	/**
+	 *  Fetches the most recent matches for the player specified
+	 */
 	async getRecentMatches(nameTag: string, region: string, platform: string, mode: string, limit: number) {
 		const response = await this.generatedClient.getRecentMatches(
 			nameTag,
