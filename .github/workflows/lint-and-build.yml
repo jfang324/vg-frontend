@@ -70,8 +70,6 @@ jobs:
               with:
                   path: generated/vg-backend/api-client
                   key: ${{ runner.os }}-api-client-${{ hashFiles('**/generated/vg-backend/api-client/swagger.yaml') }}
-                  restore-keys: |
-                      ${{ runner.os }}-api-client-
 
             - name: Build code
               run: npm run build
