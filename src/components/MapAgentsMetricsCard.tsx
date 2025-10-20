@@ -13,7 +13,7 @@ export const MapAgentsMetricsCard = ({ matches }: MapAgentsMetricsCardProps) => 
 
 	for (const match of matches) {
 		const map = match.map
-		const agent = match.agent
+		const agent = match.stats.agent
 
 		if (!maps.has(map.name)) {
 			maps.set(map.name, { wins: 0, losses: 0 })
