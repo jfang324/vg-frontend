@@ -56,9 +56,9 @@ export default function Profile() {
 
 	return (
 		<main
-			className="relative font-sans w-screen md:max-h-screen flex flex-col gap-2 md:gap-4 items-center justify-items-center px-8 md:px-16 py-8"
+			className="relative font-mono w-screen md:max-h-screen flex flex-col gap-2 md:gap-4 items-center justify-items-center p-8 md:px-16"
 			{...bind()}
-			style={{ touchAction: 'none' }}
+			style={{ touchAction: 'pan-y' }}
 		>
 			{!player && !isLoading && <Spinner className={'absolute inset-0 h-1/10 w-1/10 mx-auto my-auto'} />}
 

@@ -24,7 +24,7 @@ export function SidebarHint({ chevronCount = 5, side = 'left' }: SidebarHintProp
 
 	return (
 		<div
-			className={`fixed top-1/2 -translate-y-3/4 z-50 animate-pulse bg-primary text-primary-foreground rounded-r-lg p-2 flex flex-col justify-center items-center gap-2 ${
+			className={`fixed inset-0 max-w-[10px] max-h-[200px] top-1/2 -translate-y-3/4 z-50 animate-pulse bg-primary text-primary-foreground rounded-r-lg p-2 flex flex-col justify-center items-center gap-2 ${
 				side === 'left' ? 'left-0' : 'right-0 rounded-l-lg rounded-r-none'
 			}`}
 		>
