@@ -42,7 +42,7 @@ export const PlayersProvider = ({ children }: PlayersProviderProps) => {
 
 				if (!response) throw new Error('No response from API')
 
-				const player = new Player(response.data)
+				const player = Player.fromApiData(response.data)
 
 				setPlayers((prev) => {
 					const newPlayers = new Map(prev)

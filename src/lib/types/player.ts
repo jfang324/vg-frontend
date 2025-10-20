@@ -58,7 +58,5 @@ export type MatchPerformance = {
 		bodyshots: number
 		legshots: number
 		agent: Agent
-		rank: Omit<FullRank, 'img'>
 	}
-	agent: Agent
 }

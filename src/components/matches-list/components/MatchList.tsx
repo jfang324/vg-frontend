@@ -16,13 +16,15 @@ interface MatchesListProps {
 	region: string
 	matches: MatchPerformance[]
 	refresh: () => Promise<void>
+	loadMore: (page: number) => Promise<void>
 	isLoading: boolean
 }
 
-export const MatchesList = ({ region, matches = [], refresh, isLoading: refreshing }: MatchesListProps) => {
+export const MatchesList = ({ region, matches = [], refresh, loadMore, isLoading: refreshing }: MatchesListProps) => {
 	const [dialogOpen, setDialogOpen] = useState(false)
 	const { isLoading, error, match, fetchMatch } = useMatch()
 	const [data, setData] = useState<(MatchPerformance & { nameTag: string })[]>([])
+	const [page, setPage] = useState(1)
 
 	const router = useRouter()
 
@@ -48,6 +50,11 @@ export const MatchesList = ({ region, matches = [], refresh, isLoading: refreshi
 		router.push(`/profiles/${region}/${encodeURIComponent(nameTag)}`)
 	}
 
+	const handleLoadMore = async () => {
+		await loadMore(page + 1)
+		setPage((page) => page + 1)
+	}
+
 	return (
 		<Card className={'w-full md:w-2/3 tracking-tight'}>
 			<CardHeader className={'flex flex-row justify-between items-center'}>
@@ -68,6 +75,21 @@ export const MatchesList = ({ region, matches = [], refresh, isLoading: refreshi
 				{matches.map((match) => (
 					<MatchEntry key={match.id} match={match} onClick={() => handleDialogOpen(region, match.id)} />
 				))}
+
+				<div className={'w-full flex items-center'}>
+					{refreshing ? (
+						<Spinner className={'h-10 w-10 mx-auto my-auto'} />
+					) : (
+						<Button
+							onClick={handleLoadMore}
+							className={'hover:cursor-pointer mx-auto'}
+							size={'sm'}
+							variant={'outline'}
+						>
+							Load More
+						</Button>
+					)}
+				</div>
 			</CardContent>
 			<Dialog open={dialogOpen} onOpenChange={(open) => !open && setDialogOpen(false)}>
 				{isLoading ? <Spinner className={'absolute inset-0 h-15 w-15 mx-auto my-auto'} /> : null}

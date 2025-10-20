@@ -20,7 +20,22 @@ export class ProfileClient {
 	/**
 	 *  Fetches stored matches for the player specified
 	 */
-	async getPlayerProfile(nameTag: string, region: string, mode: string, page: number) {
+	async getPlayerProfile(nameTag: string, region: string, mode: string) {
+		const response = await this.generatedClient.getStoredMatches(
+			nameTag,
+			region as ValidRegions,
+			mode as ValidModes,
+			1,
+			10
+		)
+
+		return response.data
+	}
+
+	/**
+	 *  Fetches stored matches for the player specified
+	 */
+	async getPlayerMatches(nameTag: string, region: string, mode: string, page: number) {
 		const response = await this.generatedClient.getStoredMatches(
 			nameTag,
 			region as ValidRegions,

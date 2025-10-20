@@ -19,14 +19,20 @@ export default function Profile() {
 	const region = params.region as string
 	const nameTag = decodeURIComponent(params.nameTag as string)
 
-	const { isLoading, player, fetchProfile, refreshProfile } = useProfile()
+	const { error, isLoading, player, fetchProfile, fetchMatches, refreshProfile } = useProfile()
 
 	useEffect(() => {
-		if (player || isLoading) return
+		if (player || isLoading || error) return
 		if (!region || !nameTag) toast('Invalid region or nameTag')
 
-		fetchProfile(region, nameTag, 1)
+		fetchProfile(region, nameTag)
 	})
+
+	useEffect(() => {
+		if (error) {
+			toast('Something went wrong')
+		}
+	}, [error])
 
 	/**
 	 * Just fetch the players latest matches
@@ -34,6 +40,16 @@ export default function Profile() {
 	const handlRefresh = useCallback(async () => {
 		await refreshProfile(region, nameTag)
 	}, [region, nameTag, refreshProfile])
+
+	/**
+	 * Fetch more matches
+	 */
+	const handleLoadMore = useCallback(
+		async (page: number) => {
+			await fetchMatches(region, nameTag, page)
+		},
+		[region, nameTag, fetchMatches]
+	)
 
 	const metadata = player?.getMetadata()
 	const { level, customization, rank } = metadata || {}
@@ -79,7 +95,13 @@ export default function Profile() {
 				<AgentRadarChart metrics={metrics} matches={matches} />
 			</section>
 			<section className={'flex-1 overflow-auto font-mono w-full flex flex-col md:flex-row gap-2 md:gap-4'}>
-				<MatchesList region={region} matches={matches} refresh={handlRefresh} isLoading={isLoading} />
+				<MatchesList
+					region={region}
+					matches={matches}
+					refresh={handlRefresh}
+					loadMore={handleLoadMore}
+					isLoading={isLoading}
+				/>
 				<MatchFrequencyChart data={matchFrequency} />
 			</section>
 		</main>
