@@ -52,7 +52,7 @@ export const AnalyticsCards = () => {
 	const DialogIcon = METRICS[dialogData.metric].icon
 
 	return (
-		<div className={'w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-2 md:gap-4'}>
+		<div className={'w-full grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-1 md:gap-2'}>
 			{Object.keys(analytics).map((stat) => {
 				const title = METRICS[stat as MetricKey].shorthand
 				const Icon = METRICS[stat as MetricKey].icon

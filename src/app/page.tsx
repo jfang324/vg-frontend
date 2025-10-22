@@ -12,7 +12,7 @@ export default function Home() {
 	return (
 		<PlayersProvider>
 			<main
-				className="font-mono w-screen flex flex-col gap-2 md:gap-4 min-h-screen p-8 md:px-16"
+				className="font-mono w-screen flex flex-col gap-1 md:gap-2 min-h-screen p-8 md:px-16"
 				style={{ touchAction: 'pan-y' }}
 				{...bind()}
 			>

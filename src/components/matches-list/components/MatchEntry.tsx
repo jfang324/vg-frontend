@@ -54,7 +54,7 @@ export const MatchEntry = ({ match, onClick }: MatchEntryProps) => {
 					</div>
 				</div>
 
-				<div className={'w-[100px] items-center flex'}>
+				<div className={'w-[100px] items-center flex flex-1 md:flex-none'}>
 					<span className={'w-fit font-semibold text-nowrap text-foreground mx-auto'}>
 						{match.stats.team === 'Red'
 							? `${match.redRounds} - ${match.blueRounds}`

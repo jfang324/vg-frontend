@@ -32,7 +32,7 @@ interface MatchFrequencyChartProps {
 
 export const Chart = ({ data }: MatchFrequencyChartProps) => {
 	return (
-		<ChartContainer config={{}} className={'font-mono max-h-[400px] min-h-[100px] w-full'}>
+		<ChartContainer config={{}} className={'font-mono max-h-[250px] min-h-[100px] w-full'}>
 			<LineChart accessibilityLayer data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
 				<CartesianGrid strokeDasharray="3 3" />
 				<Tooltip content={<CustomTooltip />} />
