@@ -48,7 +48,12 @@ export const MapAgentsMetricsCard = ({ matches }: MapAgentsMetricsCardProps) => 
 
 							return (
 								<div key={map} className={'flex flex-row justify-between items-center'}>
-									<div>{map}</div>
+									<div className={'flex flex-row gap-4 md:gap-8'}>
+										<div className={'w-[50px]'}>{map}</div>
+										<div
+											className={'text-muted-foreground text-xs tracking-tighter'}
+										>{`${wins} - ${losses}`}</div>
+									</div>
 									<Badge
 										variant={'outline'}
 										className={`font-bold w-[50px] ${winRate > 50 ? 'border-green-500/50 bg-green-500/30 text-green-500' : 'border-red-500/50 bg-red-500/30 text-red-500'}`}
@@ -72,7 +77,12 @@ export const MapAgentsMetricsCard = ({ matches }: MapAgentsMetricsCardProps) => 
 
 							return (
 								<div key={agent} className={'flex flex-row justify-between items-center'}>
-									<div>{agent}</div>
+									<div className={'flex flex-row gap-4 md:gap-8'}>
+										<div className={'w-[50px]'}>{agent}</div>
+										<div
+											className={'text-muted-foreground text-xs tracking-tighter'}
+										>{`${wins} - ${losses}`}</div>
+									</div>
 									<Badge
 										variant={'outline'}
 										className={`font-bold w-[50px] ${winRate > 50 ? 'border-green-500/50 bg-green-500/30 text-green-500' : 'border-red-500/50 bg-red-500/30 text-red-500'}`}

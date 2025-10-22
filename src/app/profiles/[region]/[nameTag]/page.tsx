@@ -6,7 +6,10 @@ import { MatchesList } from '@components/matches-list'
 import { ProfileBanner } from '@components/ProfileBanner'
 import { AgentRadarChart } from '@components/radar-chart'
 import { useGestures } from '@components/sidebar'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@components/ui/select'
 import { Spinner } from '@components/ui/spinner'
+import { Tabs, TabsList, TabsTrigger } from '@components/ui/tabs'
+import { ModeKey, MODES } from '@constants/modes'
 import { useProfile } from '@hooks/useProfile'
 import { useParams } from 'next/navigation'
 import { useCallback, useEffect } from 'react'
@@ -19,14 +22,11 @@ export default function Profile() {
 	const region = params.region as string
 	const nameTag = decodeURIComponent(params.nameTag as string)
 
-	const { error, isLoading, player, fetchProfile, fetchMatches, refreshProfile } = useProfile()
+	const { error, isLoading, player, mode, setMode, fetchProfile, fetchMatches, refreshProfile } = useProfile()
 
 	useEffect(() => {
-		if (player || isLoading || error) return
-		if (!region || !nameTag) toast('Invalid region or nameTag')
-
 		fetchProfile(region, nameTag)
-	})
+	}, [nameTag, region, fetchProfile])
 
 	useEffect(() => {
 		if (error) {
@@ -72,7 +72,7 @@ export default function Profile() {
 
 	return (
 		<main
-			className="relative font-mono w-screen md:max-h-screen flex flex-col gap-2 md:gap-4 items-center justify-items-center p-8 md:px-16"
+			className="relative font-mono w-screen md:max-h-screen flex flex-col gap-1 md:gap-2 items-center justify-items-center p-8 md:px-16"
 			{...bind()}
 			style={{ touchAction: 'pan-y' }}
 		>
@@ -85,16 +85,46 @@ export default function Profile() {
 				level={level}
 				recentWins={recentWins}
 			/>
+
+			<section className={'h-fit w-full'}>
+				<Tabs
+					defaultValue={mode}
+					className={'w-full hidden md:block'}
+					onValueChange={(value) => setMode(value as ModeKey)}
+				>
+					<TabsList className={'w-full h-auto grid grid-cols-1 md:grid-cols-4'}>
+						{Object.keys(MODES).map((mode) => (
+							<TabsTrigger key={mode} value={mode} className={'hover:cursor-pointer'}>
+								{MODES[mode as ModeKey].fullTitle}
+							</TabsTrigger>
+						))}
+					</TabsList>
+				</Tabs>
+
+				<Select defaultValue={mode} onValueChange={(value) => setMode(value as ModeKey)}>
+					<SelectTrigger className="block md:hidden w-full border-primary/50 bg-primary/10 font-mono text-sm text-primary hover:cursor-pointer rounded">
+						<SelectValue placeholder={'Select a mode'} />
+					</SelectTrigger>
+					<SelectContent>
+						{Object.keys(MODES).map((mode) => (
+							<SelectItem value={mode} key={mode}>
+								{MODES[mode as ModeKey].fullTitle}
+							</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+			</section>
+
 			<section
 				className={
-					'shrink-0 font-mono w-full flex flex-col md:flex-row gap-2 md:gap-4 items-center justify-items-center'
+					'shrink-0 font-mono w-full flex flex-col md:flex-row gap-1 md:gap-2 items-center justify-items-center'
 				}
 			>
 				<AverageMetricsCard metrics={metrics} winRate={winRate} rank={rank?.name} rankImg={rank?.img} />
 				<MapAgentsMetricsCard matches={matches} />
 				<AgentRadarChart metrics={metrics} matches={matches} />
 			</section>
-			<section className={'flex-1 overflow-auto font-mono w-full flex flex-col md:flex-row gap-2 md:gap-4'}>
+			<section className={'flex-1 overflow-auto font-mono w-full flex flex-col md:flex-row gap-1 md:gap-2'}>
 				<MatchesList
 					region={region}
 					matches={matches}

@@ -10,8 +10,8 @@ export const PerformanceEntry = ({ performance, onClick }: PerformanceEntryProps
 	const team = performance.stats.team
 	const agent = performance.stats.agent
 
-	const rounds = performance.redRounds + performance.blueRounds
-	const shots = performance.stats.headshots + performance.stats.bodyshots + performance.stats.legshots
+	const rounds = performance.redRounds + performance.blueRounds || 1
+	const shots = performance.stats.headshots + performance.stats.bodyshots + performance.stats.legshots || 1
 
 	const hs = (performance.stats.headshots / shots) * 100
 	const dd = (performance.stats.damageDealt - performance.stats.damageTaken) / rounds
