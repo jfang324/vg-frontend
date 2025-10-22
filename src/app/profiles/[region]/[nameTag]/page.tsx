@@ -22,14 +22,11 @@ export default function Profile() {
 	const region = params.region as string
 	const nameTag = decodeURIComponent(params.nameTag as string)
 
-	const { error, isLoading, player, fetchProfile, fetchMatches, refreshProfile } = useProfile()
+	const { error, isLoading, player, mode, setMode, fetchProfile, fetchMatches, refreshProfile } = useProfile()
 
 	useEffect(() => {
-		if (player || isLoading || error) return
-		if (!region || !nameTag) toast('Invalid region or nameTag')
-
 		fetchProfile(region, nameTag)
-	})
+	}, [nameTag, region, fetchProfile])
 
 	useEffect(() => {
 		if (error) {
@@ -90,7 +87,11 @@ export default function Profile() {
 			/>
 
 			<section className={'h-fit w-full'}>
-				<Tabs defaultValue={'competitive'} className={'w-full hidden md:block'}>
+				<Tabs
+					defaultValue={mode}
+					className={'w-full hidden md:block'}
+					onValueChange={(value) => setMode(value as ModeKey)}
+				>
 					<TabsList className={'w-full h-auto grid grid-cols-1 md:grid-cols-4'}>
 						{Object.keys(MODES).map((mode) => (
 							<TabsTrigger key={mode} value={mode} className={'hover:cursor-pointer'}>
@@ -100,7 +101,7 @@ export default function Profile() {
 					</TabsList>
 				</Tabs>
 
-				<Select defaultValue={'competitive'}>
+				<Select defaultValue={mode} onValueChange={(value) => setMode(value as ModeKey)}>
 					<SelectTrigger className="block md:hidden w-full border-primary/50 bg-primary/10 font-mono text-sm text-primary hover:cursor-pointer rounded">
 						<SelectValue placeholder={'Select a mode'} />
 					</SelectTrigger>

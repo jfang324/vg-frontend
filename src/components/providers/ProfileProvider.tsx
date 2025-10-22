@@ -1,4 +1,5 @@
 'use client'
+import { type ModeKey } from '@constants/modes'
 import { playerClient } from '@lib/api/playerClient'
 import { profileClient } from '@lib/api/profileClient'
 import { Player } from '@lib/models/Player'
@@ -13,6 +14,8 @@ export interface ProfileContext {
 	isLoading: boolean
 	error: Error | null
 	player: Player | null
+	mode: ModeKey
+	setMode: (mode: ModeKey) => void
 	fetchProfile: (region: string, nameTag: string) => Promise<void>
 	fetchMatches: (region: string, nameTag: string, page: number) => Promise<void>
 	refreshProfile: (region: string, nameTag: string) => Promise<void>
@@ -25,29 +28,33 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 	const [error, setError] = useState<Error | null>(null)
 
 	const [player, setPlayer] = useState<Player | null>(null)
+	const [mode, setMode] = useState<ModeKey>('competitive')
 
 	/**
 	 * Fetch player profile data
 	 */
-	const fetchProfile = useCallback(async (region: string, nameTag: string) => {
-		try {
-			setIsLoading(true)
+	const fetchProfile = useCallback(
+		async (region: string, nameTag: string) => {
+			try {
+				setIsLoading(true)
 
-			const response = await profileClient.getPlayerProfile(nameTag, region, 'competitive')
+				const response = await profileClient.getPlayerProfile(nameTag, region, mode)
 
-			if (!response) throw new Error('No response from API')
+				if (!response) throw new Error('No response from API')
 
-			const player = Player.fromApiData(response.data)
+				const player = Player.fromApiData(response.data)
 
-			setPlayer(player)
-			setError(null)
-		} catch (error: unknown) {
-			console.error(error)
-			setError(error as Error)
-		} finally {
-			setIsLoading(false)
-		}
-	}, [])
+				setPlayer(player)
+				setError(null)
+			} catch (error: unknown) {
+				console.error(error)
+				setError(error as Error)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		[mode]
+	)
 
 	/**
 	 * Fetch player's latest matches
@@ -115,11 +122,13 @@ export const ProfileProvider = ({ children }: ProfileProviderProps) => {
 			isLoading,
 			error,
 			player,
+			mode,
+			setMode,
 			fetchProfile,
 			fetchMatches,
 			refreshProfile
 		}),
-		[isLoading, error, player, fetchProfile, fetchMatches, refreshProfile]
+		[isLoading, error, player, fetchProfile, fetchMatches, refreshProfile, mode]
 	)
 
 	return <ProfileContext.Provider value={contextValue}>{children}</ProfileContext.Provider>
