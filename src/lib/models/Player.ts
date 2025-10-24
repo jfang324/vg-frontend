@@ -86,14 +86,19 @@ export class Player {
 	 * @returns An array of performance metrics
 	 */
 	calculatePerformanceMetrics(): GraphMetrics[] {
-		return this.matches.map((match) => ({
-			acs: match.stats.score / (match.redRounds + match.blueRounds),
-			hs: (match.stats.headshots / (match.stats.headshots + match.stats.bodyshots + match.stats.legshots)) * 100,
-			kd: match.stats.kills / match.stats.deaths,
-			kda: (match.stats.kills + match.stats.assists) / match.stats.deaths,
-			adr: match.stats.damageDealt / (match.redRounds + match.blueRounds),
-			dd: (match.stats.damageDealt - match.stats.damageTaken) / (match.redRounds + match.blueRounds)
-		}))
+		return this.matches.map((match) => {
+			const totalRounds = match.redRounds + match.blueRounds || 1
+			const totalShots = match.stats.headshots + match.stats.bodyshots + match.stats.legshots || 1
+
+			return {
+				acs: match.stats.score / totalRounds,
+				hs: (match.stats.headshots / totalShots) * 100,
+				kd: match.stats.kills / match.stats.deaths,
+				kda: (match.stats.kills + match.stats.assists) / match.stats.deaths,
+				adr: match.stats.damageDealt / totalRounds,
+				dd: (match.stats.damageDealt - match.stats.damageTaken) / totalRounds
+			}
+		})
 	}
 
 	/**

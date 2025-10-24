@@ -17,8 +17,8 @@ export const MatchEntry = ({ match, onClick }: MatchEntryProps) => {
 	const diffTime = now.getTime() - date.getTime()
 	const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24))
 
-	const rounds = match.redRounds + match.blueRounds
-	const shots = match.stats.headshots + match.stats.bodyshots + match.stats.legshots
+	const rounds = match.redRounds + match.blueRounds || 1
+	const shots = match.stats.headshots + match.stats.bodyshots + match.stats.legshots || 1
 
 	const hs = (match.stats.headshots / shots) * 100
 	const dd = (match.stats.damageDealt - match.stats.damageTaken) / rounds
