@@ -42,3 +42,6 @@ next-env.d.ts
 
 #ignore generated files
 generated/vg-backend/api-client
+
+#don't ignore example .env
+!.env.example
