@@ -35,12 +35,14 @@ export default function RootLayout({
 			<AppSidebar />
 			<html lang="en" className={'valorant'}>
 				<head>
-					<Script async src="https://www.googletagmanager.com/gtag/js?id=G-1HBGP08844"></Script>
+					<Script async src="https://www.googletagmanager.com/gtag/js?id=G-CV2VNNB172"></Script>
 					<Script id="google-analytics">
 						{`
-                        	window.dataLayer = window.dataLayer || []
-							function gtag() {dataLayer.push(arguments)}
-							gtag('js', new Date())
+                        	window.dataLayer = window.dataLayer || [];
+  							function gtag(){dataLayer.push(arguments);}
+  							gtag('js', new Date());
+
+  							gtag('config', 'G-CV2VNNB172');
                     	`}
 					</Script>
 				</head>
